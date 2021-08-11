@@ -13,6 +13,7 @@ import concurrent.futures
 import itertools
 from bs4 import BeautifulSoup
 from requests.packages import chardet
+from tqdm import tqdm
 
 def _crateboomlist():
 	protocols = ['http://','https://']
@@ -87,12 +88,15 @@ if __name__ == '__main__':
 
 	urls = _crateboomlist()
 
-	with concurrent.futures.ThreadPoolExecutor(max_workers=200) as executor:
-		_todo = {executor.submit(_boom,url): url for url in urls}
-		for future in concurrent.futures.as_completed(_todo):
-			url = _todo[future]
+	l = len(urls)
+	with tqdm(total=l) as pbar:
+		with concurrent.futures.ThreadPoolExecutor(max_workers=200) as executor:
+			_todo = {executor.submit(_boom,url): url for url in urls}
+			for future in concurrent.futures.as_completed(_todo):
+				url = _todo[future]
 
-			data = future.result()
+				data = future.result()
+				pbar.update(1)
 	print('YoungRichOG https://youngrichog.github.io/')
 	print('-'*60)
 	print('[**] 长度结果:',_length_trigger)
