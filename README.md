@@ -32,7 +32,7 @@ python3 hosts_boom.py
 
 ## TODO
 
-进度条
+~~进度条~~
 
 重定向
 
